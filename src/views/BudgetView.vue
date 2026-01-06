@@ -30,20 +30,20 @@
     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
         <h3 class="font-bold text-gray-700 mb-3 text-sm">新增一筆支出</h3>
         <div class="flex gap-2 mb-2">
-            <select v-model="newExp.payer" class="w-1/3 border p-2 rounded bg-gray-50 text-sm">
-                <option v-for="m in members" :value="m">{{ m }}</option>
+            <select v-model="newExp.payer" class="w-1/3 border p-2 rounded bg-gray-50 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                <option v-for="m in members" :key="m" :value="m">{{ m }}</option>
             </select>
-            <input v-model="newExp.amount" type="number" placeholder="金額" class="flex-1 border p-2 rounded bg-gray-50 text-sm">
+            <input v-model="newExp.amount" type="number" placeholder="金額" class="flex-1 border p-2 rounded bg-gray-50 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
         </div>
         <div class="flex gap-2">
-            <input v-model="newExp.desc" placeholder="項目 (例: 章魚燒)" class="flex-1 border p-2 rounded bg-gray-50 text-sm">
-            <button @click="submitExpense" class="bg-indigo-600 text-white px-4 rounded font-bold text-sm">記帳</button>
+            <input v-model="newExp.desc" placeholder="項目 (例: 章魚燒)" class="flex-1 border p-2 rounded bg-gray-50 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+            <button @click="submitExpense" class="bg-indigo-600 text-white px-4 rounded font-bold text-sm hover:bg-indigo-700 transition-colors">記帳</button>
         </div>
     </div>
 
     <div class="space-y-2">
         <h3 class="font-bold text-gray-500 text-xs pl-1">近期紀錄</h3>
-        <div v-for="item in expenses.slice().reverse()" :key="item.id" class="bg-white p-3 rounded-lg border border-gray-100 flex justify-between items-center">
+        <div v-for="item in expenses.slice().reverse()" :key="item.id" class="bg-white p-3 rounded-lg border border-gray-100 flex justify-between items-center shadow-sm">
             <div class="flex items-center">
                 <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold mr-3">
                     {{ item.payer[0] }}
@@ -55,8 +55,13 @@
             </div>
             <div class="text-right">
                 <p class="font-bold text-gray-800">¥{{ Number(item.amount).toLocaleString() }}</p>
-                <button @click="deleteExpense(item.id)" class="text-xs text-gray-300 hover:text-red-500">刪除</button>
+                <button @click="deleteExpense(item.id)" class="text-xs text-gray-300 hover:text-red-500 transition-colors ml-2">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </div>
+        </div>
+        <div v-if="expenses.length === 0" class="text-center text-gray-300 text-sm py-4">
+            尚無記帳資料
         </div>
     </div>
 
@@ -71,8 +76,17 @@ const { members, expenses, totalExpense, debts, addExpense, deleteExpense } = us
 const newExp = ref({ payer: '我', amount: '', desc: '' });
 
 const submitExpense = () => {
+    // 檢查必填
     if(!newExp.value.amount || !newExp.value.desc) return;
-    addExpense({ ...newExp.value });
+
+    // 👇 關鍵修正：將 amount 強制轉為 Number，避免字串串接錯誤
+    addExpense({ 
+        payer: newExp.value.payer,
+        amount: Number(newExp.value.amount), // 這裡加了 Number()
+        desc: newExp.value.desc
+    });
+    
+    // 重置欄位
     newExp.value.amount = ''; 
     newExp.value.desc = '';
 };

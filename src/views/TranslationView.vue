@@ -18,7 +18,7 @@
         <textarea 
             v-model="inputText"
             class="w-full flex-1 bg-transparent border-0 p-0 text-lg font-medium text-gray-800 focus:ring-0 resize-none placeholder-gray-300 leading-relaxed" 
-            placeholder="請輸入想翻譯的句子... (例如：請問廁所在哪裡？)">
+            placeholder="">
         </textarea>
         
         <div class="absolute bottom-4 right-4">
