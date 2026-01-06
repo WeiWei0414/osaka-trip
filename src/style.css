@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 引入 FontAwesome 圖示庫 */
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+body {
+    /* 修改這裡：把 jp-gray 改成標準的 gray */
+    @apply bg-gray-100 text-gray-700;
+    
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 隱藏捲軸 */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 輸入框樣式優化 */
+input:focus, select:focus {
+    outline: none;
+    /* 修改這裡：把 jp-sky 改成 indigo */
+    @apply ring-1 ring-indigo-500 border-indigo-500;
+}
